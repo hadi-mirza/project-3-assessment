@@ -1,0 +1,56 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}?{% now "U" %}">
+</head>
+<body>
+    <h1>Wacky Widgets</h1>
+    {% if widgets|length == 0 %}
+       <h3>Nothing here</h3>
+{% else %}
+<table class="pure-table pure-table-striped">
+<thead>
+  <tr>
+    <th>Description</th>
+    <th>Quantity</th>
+    <th>Delete</th>
+  </tr>
+</thead>
+<tbody>
+  {% for widget in widgets %}
+  <tr>
+    <td>{{ widget.description }}</td>
+    <td>{{ widget.quantity }}</td>
+    <td>
+      <form action="{{ widget.id}}/delete/" method="post">
+        {% csrf_token %} 
+        <a type="submit" href="{{ widget.id}}/delete/">X</a>
+    </form>
+  </td>
+  </tr>
+  {% endfor %}
+</tbody>
+<tfoot>
+  <tr>
+    <td>Total Quantity</td>
+    <td>{{ total_quantity }}</td>
+    <td></td>
+  </tr>
+</tfoot>
+</table>
+{% endif %}
+<hr>
+<form class="pure-form" method="post" action="/">
+    {% csrf_token %}
+      {{ form.as_p }}
+  
+      <input class="pure-button" type="submit" value="Add Widget">
+  </form>
+</body>
+</html>
